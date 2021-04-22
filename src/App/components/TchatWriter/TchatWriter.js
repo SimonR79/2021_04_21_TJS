@@ -14,7 +14,7 @@ const [message, setmessage] = useState(initialState);
     <input type="color" value={message.color} onChange={e=>{
         setmessage({...message,color:e.target.value})
     }} />
-    <SelectUser value={message.dest} users={[]} onuserselectionchange={(id)=>{
+    <SelectUser value={message.dest} users={[]} onselectchange={(id)=>{
         setmessage({...message,dest:id})
     }}><option value={-1}>Tout le monde</option></SelectUser>
     <Button title="Envoyer" onclickbutton={()=>{}} />

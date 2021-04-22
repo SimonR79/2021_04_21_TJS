@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styles from './TchatWriter.module.scss';
 import SelectUser from '../SelectUser/SelectUser';
 import Button from '../Button/Button';
+import store, { TCHAT_ACTIONS } from '../../reducers/store';
 const initialState={text:'', color:'#FFFFFF', dest:-1,}
 const TchatWriter = (props) => {
 const [message, setmessage] = useState(initialState);
@@ -14,10 +15,14 @@ const [message, setmessage] = useState(initialState);
     <input type="color" value={message.color} onChange={e=>{
         setmessage({...message,color:e.target.value})
     }} />
-    <SelectUser value={message.dest} users={[]} onselectchange={(id)=>{
+    <SelectUser value={message.dest} users={[]} onuserselectionchange={(id)=>{
         setmessage({...message,dest:id})
     }}><option value={-1}>Tout le monde</option></SelectUser>
-    <Button title="Envoyer" onclickbutton={()=>{}} />
+    <Button title="Envoyer" onclickbutton={()=>{
+      const toSendMessage={...message, dateTime:new Date().toISOString()}
+      console.log(toSendMessage);
+      store.dispatch({type:TCHAT_ACTIONS.SEND_MESSAGE,value:toSendMessage});
+    }} />
   </div>
 );}
 

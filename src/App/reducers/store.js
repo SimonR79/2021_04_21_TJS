@@ -3,14 +3,19 @@ import { REST_ADR } from '../config/config';
 
 export const initialState = {
     messages:[],
-    tchatUsers:[]
+    tchatUsers:[],
+    destinataireId:-1,
+    connectedUser:null
 }
 
 export const TCHAT_ACTIONS=Object.freeze({
     ADD_USERS:'ADD_USERS',
     ADD_USER:'ADD_USER',
     ADD_MESSAGES:'ADD_MESSAGES',
-    SEND_MESSAGE:'SEND_MESSAGE'
+    SEND_MESSAGE:'SEND_MESSAGE',
+    SELECT_DEST:'SELECT_DEST',
+    CONNECT_USER:'CONNECT_USER',
+    DISCONNECT_USER:'DISCONNECT_USER'
 });
 
 const TCHAT_PRIVATE_ACTIONS=Object.freeze({
@@ -31,10 +36,10 @@ function tchatReducer(state=initialState, action){
             fetch(`${REST_ADR}/tchatUsers`).then(f=>f.json()).then(o=>{
                 store.dispatch({type:TCHAT_ACTIONS.ADD_USERS,values:o});
             });
-            setInterval(()=>{store.dispatch({type:TCHAT_PRIVATE_ACTIONS.PULLING})}, 2000);
+            setInterval(()=>{store.dispatch({type:TCHAT_PRIVATE_ACTIONS.PULLING})}, 5000);
             return state;
         case TCHAT_ACTIONS.SEND_MESSAGE:
-            fetch(`${REST_ADR}`,{method:'POST', body:JSON.stringify(action.value),
+            fetch(`${REST_ADR}/messages`,{method:'POST', body:JSON.stringify(action.value),
         headers:{'Content-Type' : 'application/json'}})
             .then(f=>{console.log(f)},f=>{console.log(f);})
             return state;
@@ -51,6 +56,9 @@ function tchatReducer(state=initialState, action){
         case TCHAT_ACTIONS.ADD_USERS:return {...state,tchatUsers:[...state.tchatUsers,...action.values]};
         case TCHAT_ACTIONS.ADD_USER:return {...state,tchatUsers:[...state.tchatUsers,action.value]};
         case TCHAT_ACTIONS.ADD_MESSAGES:return {...state,messages:[...state.messages,...action.values]};
+        case TCHAT_ACTIONS.SELECT_DEST:return {...state,destinataireId:action.value};
+        case TCHAT_ACTIONS.CONNECT_USER:return {...state,connectedUser:action.value};
+        case TCHAT_ACTIONS.DISCONNECT_USER:return {...state,connectedUser:null};
         default:return state;
     }
 }

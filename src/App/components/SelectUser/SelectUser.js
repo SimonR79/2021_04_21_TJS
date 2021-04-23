@@ -12,7 +12,8 @@ const SelectUser = (props) => {
    })
   }, []);
   return(
-  <select className="SelectUser" data-testid="SelectUser" value={props.selectedId} onChange={(evt)=>props.onuserselectionchange(parseInt(evt.target.value))}>
+  <select className="SelectUser" data-testid="SelectUser" value={props.selectedId} 
+  onChange={(evt)=>props.onuserselectionchange(parseInt(evt.target.value))}>
     {props.children}
     {users.map((e,i)=><option key={`user-${e.id}`} value={`${e.id}`} >{`${e.id}:${e.login}`}</option>)}
   </select>
